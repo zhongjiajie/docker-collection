@@ -1,0 +1,33 @@
+version: '3.3'
+services:
+  mqnamesrv:
+    image: zhongjiajie/rocketmq:4.1.0
+    restart: always
+    environment:
+      # must have same variables if you want to change
+      - JVM_MEMORY=-Xms1g -Xmx1g -Xmn512m -XX:PermSize=64m -XX:MaxPermSize=256m
+    volumes:
+      - ./volume/namesrv/logs:/opt/logs
+      - ./volume/namesrv/store:/opt/store
+    ports:
+      - 9876:9876
+    # start rocketmq mqnamesrv
+    command: namesrv
+
+  mqbroker:
+    image: zhongjiajie/rocketmq:4.1.0
+    restart: always
+    environment:
+      # must have same variables if you want to change
+      - JVM_MEMORY=-Xms2g -Xmx2g -Xmn1g
+    depends_on:
+      - mqnamesrv
+    volumes:
+      - ./volume/broker/logs:/opt/logs
+      - ./volume/broker/store:/opt/store
+    # annotation off if you want to expose broker ports
+    # ports:
+    #   - 10909:10909
+    #   - 10911:10911
+    # start rocketmq mqbroker and use service mqnamesrv:9876 as nameserver
+    command: broker mqnamesrv
