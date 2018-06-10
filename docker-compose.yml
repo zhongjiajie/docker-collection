@@ -1,7 +1,7 @@
 version: '3.3'
 services:
   mqnamesrv:
-    image: zhongjiajie/rocketmq:4.1.0
+    image: zhongjiajie/docker-rocketmq:4.1.0
     restart: always
     environment:
       # must have same variables if you want to change
@@ -15,7 +15,7 @@ services:
     command: namesrv
 
   mqbroker:
-    image: zhongjiajie/rocketmq:4.1.0
+    image: zhongjiajie/docker-rocketmq:4.1.0
     restart: always
     environment:
       # must have same variables if you want to change

@@ -51,7 +51,7 @@ Scale the number of broker, if you want to start rocketmq with numbers of broker
 
 ```shell
 # eg if you want to scale 3 mqbrokers
-docker-compose up --scale mqbroker=3
+docker-compose up --scale mqbroker=3 --no-recreate
 ```
 
 ## Wanna help?
