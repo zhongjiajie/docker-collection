@@ -7,8 +7,8 @@ services:
       # must have same variables if you want to change
       - JVM_MEMORY=-Xms1g -Xmx1g -Xmn512m -XX:PermSize=64m -XX:MaxPermSize=256m
     volumes:
-      - ./volume/namesrv/logs:/opt/logs
-      - ./volume/namesrv/store:/opt/store
+      - /path/to/DockerData/rocket/namesrv/logs:/opt/logs
+      - /path/to/DockerData/rocket/namesrv/store:/opt/store
     ports:
       - 9876:9876
     # start rocketmq mqnamesrv
@@ -23,8 +23,8 @@ services:
     depends_on:
       - mqnamesrv
     volumes:
-      - ./volume/broker/logs:/opt/logs
-      - ./volume/broker/store:/opt/store
+      - /path/to/DockerData/rocket/broker/logs:/opt/logs
+      - /path/to/DockerData/rocket/broker/store:/opt/store
     # annotation off if you want to expose broker ports
     # ports:
     #   - 10909:10909

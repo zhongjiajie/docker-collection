@@ -1,0 +1,10 @@
+version: '3.3'
+services:
+  mysql:
+    image: registry:2.6.2
+    restart: always
+    container_name: registry
+    volumes:
+      - /path/to/DockerData/registry:/var/lib/registry
+    ports:
+      - 5000:5000

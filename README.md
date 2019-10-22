@@ -1,67 +1,46 @@
-# docker-rocketmq
+# docker-repo
 
-[docker-rocketmq][1] is basic [apache rockermq][2] docker container which base on [rocketmq-externals-docker][3] and make some changes make it more convenient.
+开发过程中比较有用的docker镜像,以docker-compose的方式编排,方便搭建测试和开发环境.
 
-## Feature
+## 仓库解释
 
-* One image: make only one image to declare rocketmq-namesrv and rocketmq-broker, which difference from [rocketmq-externals-docker][3] make two images
-* Custom JVM MEMORY: docker-compose has environment variables named `JVM_MEMORY` convenient to set runtime JVM memory
-* Scale service easier: use docker-compose can scale service easier
+* baseImages: 自定义的基础镜像仓库
+* elasticsearch: elasticsearch单实例部署
+* ftp: ftp服务器
+* mysql: mysql单实例服务器
+* redis: redis单实例服务器
+* registry: docker registry
 
-## Informations
+## 脚本解释
 
-* Based on Java-8 official Image [java:8][4]
-* Install [Docker][5]
-* Install [Docker Compose][6]
-* Following the rocketmq release from [dist.apache.org][7]
+* maintain.sh: docker-compose维护脚本.
+  * 删除docker中的dangling镜像`./maintain.sh i|image`
+  * 删除docker中已经退出的容器`./maintain.sh c|container`
+* repo.sh: 启动 停止 重启 docker-compose项目.
+  * 启动: `./repo.sh start -v venv -f /path/to/docker-compose`
+  * 停止: `./repo.sh stop -v venv -f /path/to/docker-compose`
+  * 重启: `./repo.sh restart -v venv -f /path/to/docker-compose`
 
-## Installation
+## 更新公网镜像
 
-* **Pull** the image from the Docker repository
-
-  ```shell
-  docker pull zhongjiajie/docker-rocketmq
-  ```
-
-* **Build** by yourself(it is helpful if you want to make some change base on this repo)
-
-  ```shell
-  git clone https://github.com/zhongjiajie/docker-rocketmq
-  cd docker-rocketmq
-  docker build --rm -t zhongjiajie/rocketmq .
-  ```
-
-## Usage
-
-By default, you can run rocketmq with simple command
+部分仓库基于公网,当公网的仓库更新时应该随着内网也应该定时更新,目前没有想到很好的更新方式,只能手动更新(基础组件镜像不会有太大的改动,所以不会有大的冲突),下面以[github-docker-gitlab][2]为例说明手动更新
 
 ```shell
-docker-compose up -d
+cd /path/to/update
+git clone git@github.com:sameersbn/docker-gitlab.git
+# 删除 /path/to/update/docker-gitlab 项目除了 .git 文件夹之外的内容
+# 手动将该项目的docker-gitlab文件夹的全部内容复制到 /path/to/update/docker-gitlab 中
+git status  # 查看该项目和公网的项目有没有区别
+git diff    # 如果有区别查看两个项目的区别,并人工选择要更新的内容完成更新
+# 将人工更新完的内容复制回该项目的docker-gitlab文件夹中
 ```
 
-This command will run exactly one rocketmq-namesrv and one rocketmq-broker with given `JVM_MEMORY` environment define in **docker-compose.yml**. if you want to run in custom `JVM_MEMORY` environment you can change the variable in **docker-compose.yml** and start by the same command `docker-compose up -d`
+### 部分仓库更新说明
 
-To stop the runing container
+* redis-cluster: 在[github-redis-cluster][3]的基础上更新了redis镜像版本
 
-```shell
-docker-compose down
-```
+## TODO
 
-Scale the number of broker, if you want to start rocketmq with numbers of broker, you could run docker-compose with `--scale` flag
+## 其他实用的docker-repo
 
-```shell
-# eg if you want to scale 3 mqbrokers
-docker-compose up --scale mqbroker=3 --no-recreate
-```
-
-## Wanna help?
-
-Fork, improve and PR. ;-)
-
-[1]: https://github.com/zhongjiajie/docker-rocketmq
-[2]: https://github.com/apache/rocketmq
-[3]: https://github.com/apache/rocketmq-externals/tree/master/rocketmq-docker
-[4]: https://hub.docker.com/_/java/
-[5]: https://www.docker.com/
-[6]: https://docs.docker.com/compose/install/
-[7]: https://dist.apache.org/repos/dist/release/rocketmq/
+* [docker-airflow](https://github.com/puckel/docker-airflow)

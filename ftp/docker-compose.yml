@@ -1,0 +1,15 @@
+version: '3.3'
+services:
+  mysql:
+    image: bogem/ftp
+    restart: always
+    container_name: ftp
+    environment:
+      - FTP_USER=ftp
+      - FTP_PASS=ftp
+      - PASV_ADDRESS=<server ip here>
+    volumes:
+      - /path/to/DockerData/ftp:/home/vsftpd
+    ports:
+      - 20-21:20-21
+      - 47400-47470:47400-47470
