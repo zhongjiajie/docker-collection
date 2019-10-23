@@ -39,6 +39,18 @@ git diff    # 如果有区别查看两个项目的区别,并人工选择要更�
 
 * redis-cluster: 在[github-redis-cluster][3]的基础上更新了redis镜像版本
 
+## 批量修改volumns的shell脚本
+
+repo的volumn路径都是`/path/to`,使用的时候要修改成对应自己的路径名,这里提供一个简易方法用来实现这个功能
+
+```sh
+DOCKERDATA_PATH="/PUT/YOUR/LOCAL/PATH/HERE"
+DOCKERDATA_PATH_REPLACE="${DOCKERDATA_PATH//\//\\/}"
+find . -name '*.yml' | while read file_path; do
+    sed -i '' "s/\/path\/to\/DockerData/$DOCKERDATA_PATH_REPLACE/g" $file_path
+done
+```
+
 ## TODO
 
 ## 其他实用的docker-repo
